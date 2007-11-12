@@ -5,7 +5,7 @@ use warnings;
 use Pod::Generated 'doc';
 
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 
 use base 'Template::Plugin';
@@ -115,7 +115,7 @@ sub write_methods {
         };
 
         $result .=
-            "=item $vars->{sub}\n\n$vars->{example}\n\n$vars->{purpose}\n";
+            "=item $vars->{sub}\n\n$vars->{example}\n\n$vars->{purpose}\n\n";
     }
 
     1 while chomp $result;

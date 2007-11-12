@@ -4,6 +4,13 @@ global:
 releases:
   - author: 'Marcel Gruenauer <marcel@cpan.org>'
     changes:
+      - fixed newline issue in write_methods()
+    date: 2007-11-12T13:28:16Z
+    tags:
+      - BUGFIX
+    version: 0.02
+  - author: 'Marcel Gruenauer <marcel@cpan.org>'
+    changes:
       - original version
     date: 2007-11-11T21:02:45Z
     tags: []

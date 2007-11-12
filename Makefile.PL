@@ -10,8 +10,6 @@ requires 'Template';
 build_requires 'Test::Differences';
 build_requires 'Test::More' => '0.70';
 
-install_script glob('bin/*');
-
 use_standard_tests(without => 'pod_coverage');
 auto_include;
 WriteAll;
