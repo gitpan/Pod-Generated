@@ -3,3 +3,5 @@
 allow = refs
 
 [-BuiltinFunctions::ProhibitStringyEval]
+[-ControlStructures::ProhibitMutatingListFunctions]
+

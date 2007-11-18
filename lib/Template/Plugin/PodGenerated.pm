@@ -2,10 +2,13 @@ package Template::Plugin::PodGenerated;
 
 use strict;
 use warnings;
+use Class::ISA;
+use Devel::Symdump;
 use Pod::Generated 'doc';
+use Text::Conjunct;
 
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 
 use base 'Template::Plugin';
@@ -33,17 +36,25 @@ sub new {
     eval $source;
     die "can't eval source: $@\n" if $@;
 
-    bless {
-        _CONTEXT => $context,
-        package  => $package,
+     # now that the source has been evaluated, we can look at the package
+     # variables.
+ 
+     my $version;
+     {
+         no strict 'refs';
+         $version = ${ "${package}::VERSION" };
+     }
+ 
+     bless {
+         _CONTEXT => $context,
+         package  => $package,
+         version  => $version,
     }, $class;
 }
 
 
-sub package {
-    my $self = shift;
-    $self->{package};
-}
+sub package { $_[0]->{package} }
+sub version { $_[0]->{version} }
 
 
 sub format {
@@ -56,12 +67,42 @@ sub format {
             $result .= "$line\n";
             $line = $indent . $word;
         } else {
-            $line .= ' ' if length($result) != 0 || length($line) != 0;
+            $line .= ' ' if $line =~ /\S/;
             $line .= $word;
         }
     }
     $result .= "$line\n";
     $result;
+}
+
+
+sub get_inheritance_data {
+    my $self = shift;
+
+    # If several packages define a function, only the lowest class gets
+    # mentioned, as it overrides the definition of its superclasses. Seed the
+    # lookup hash with the functions defined in the class that is being
+    # documented, as we don't want to report those functions from the
+    # inheritance.
+
+    my %seen;
+    $seen{$_} = 1 for
+        map { s/^ $self->{package} :://x; $_ }
+        Devel::Symdump->new($self->{package})->functions;
+
+    my @result;
+
+    for my $package (Class::ISA::super_path($self->{package})) {
+        my @functions;
+        for my $function (Devel::Symdump->new($package)->functions) {
+            $function =~ s/^ $package :://x;
+            next if $seen{$function}++;
+            push @functions => $function;
+        }
+
+        push @result => $package, [ $self->sub_order(@functions) ];
+    }
+    wantarray ? @result : \@result;
 }
 
 
@@ -74,22 +115,27 @@ sub write_inheritance {
         indent => 0,
         width  => 75,
         text   => sprintf "%s inherits from %s.\n", $self->{package},
-            join ', ' =>
-            map { "L<$_>" } 
-            @inherited
+            conjunct and => map { "L<$_>" } @inherited
     );
 
-    my %doc = doc();
-    for my $pkg (@inherited) {
-        next unless keys %{ $doc{$pkg}{CODE} || {} };
-        $result .= "\nMethods inherited from L<$pkg>:\n\n";
+    my @inheritance = $self->get_inheritance_data;
+    while (my ($package, $functions) = splice(@inheritance, 0, 2)) {
+        next unless @$functions;
+        $result .= "\n";
+        $result .= $self->format(
+            indent => 0,
+            width  => 75,
+            text   => "The superclass L<$package> defines these methods and functions:"
+        );
+        $result .= "\n";
         $result .= $self->format(
             indent => 4,
             width  => 75,
             text   =>
                 join ', ' =>
+                # map { "L<$_()|$package/$_>" }
                 map { "$_()" }
-                $self->sub_order(keys %{ $doc{$pkg}{CODE} })
+                @$functions,
         );
     }
 

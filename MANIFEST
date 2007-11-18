@@ -1,5 +1,7 @@
 Changes
+inc/Module/AutoInstall.pm
 inc/Module/Install.pm
+inc/Module/Install/AutoInstall.pm
 inc/Module/Install/Base.pm
 inc/Module/Install/Can.pm
 inc/Module/Install/Fetch.pm
@@ -13,6 +15,7 @@ inc/Test/Compile.pm
 inc/Test/Differences.pm
 inc/Test/More.pm
 inc/UNIVERSAL/require.pm
+inc/YAML.pm
 lib/Pod/Generated.pm
 lib/Pod/Generated/Attributes.pm
 lib/Template/Plugin/PodGenerated.pm

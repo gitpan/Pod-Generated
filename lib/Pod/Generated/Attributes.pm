@@ -7,7 +7,7 @@ use Attribute::Handlers;
 use Pod::Generated 'add_doc';
 
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 
 sub add_attr_doc {

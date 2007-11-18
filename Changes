@@ -4,6 +4,22 @@ global:
 releases:
   - author: 'Marcel Gruenauer <marcel@cpan.org>'
     changes:
+      - Now uses Text::Conjunct so that Template::Plugin::PodGenerated->write_inheritance() produces more natural-sounding documentation
+      - '.shipit: added Twitter step'
+      - 'Makefile.PL: added auto_install()'
+      - "Template::Plugin::PodGenerated: also put the generated package's version number into the stash"
+      - updated MANIFEST
+      - made format() produce better-looking output
+      - improved reporting of inherited methods
+      - 'Template::Plugin::PodGenerated: added version()'
+      - 't/perlcriticrc: added [-ControlStructures::ProhibitMutatingListFunctions]'
+      - 'Makefile.PL: build_requires YAML'
+    date: 2007-11-18T13:19:05Z
+    tags:
+      - NEWFEATURE
+    version: 0.03
+  - author: 'Marcel Gruenauer <marcel@cpan.org>'
+    changes:
       - fixed newline issue in write_methods()
     date: 2007-11-12T13:28:16Z
     tags:
