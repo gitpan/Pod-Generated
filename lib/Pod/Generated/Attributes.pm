@@ -7,11 +7,21 @@ use Attribute::Handlers;
 use Pod::Generated 'add_doc';
 
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 
 
 sub add_attr_doc {
     my ($type, $package, $symbol, $referent, $attr, $data, $phase) = @_;
+
+    # Work around an API change in Attribute::Handlers 0.79, shipped with perl
+    # 5.10, where a single scalar value is returned as an array ref when
+    # ATTR(SCALAR) is used. Not in the other ATTR cases though...  We can't
+    # just require A::H 0.79 though because as of this writing it only exists
+    # as part of perl 5.10; the most recent standalone distribution on CPAN is
+    # 0.78.
+
+    $data = $data->[0] if ref($data) eq 'ARRAY' && @$data == 1;
+
     add_doc($package, ref($referent), *{$symbol}{NAME}, $type, $data);
 }
 

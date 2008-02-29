@@ -21,9 +21,10 @@ no_index:
     - t
 requires: 
   Class::ISA: 0
+  Devel::Peek: 0
   Devel::Symdump: 0
   Module::Install::Template: 0
   Template: 0
   Text::Conjunct: 0
   perl: 5.6.0
-version: 0.03
+version: 0.04

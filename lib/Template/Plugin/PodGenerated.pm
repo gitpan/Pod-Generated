@@ -3,12 +3,13 @@ package Template::Plugin::PodGenerated;
 use strict;
 use warnings;
 use Class::ISA;
+use Devel::Peek 'CvGV';
 use Devel::Symdump;
 use Pod::Generated 'doc';
 use Text::Conjunct;
 
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 
 
 use base 'Template::Plugin';
@@ -76,6 +77,17 @@ sub format {
 }
 
 
+# Heuristic: It's not a method if it has been imported from another package.
+# That is, if the glob is aliased to another package. CvGV() tells us that.
+
+sub is_not_method {
+    my ($self, $function, $package) = @_;
+    my $current = "${package}::${function}";
+    no strict 'refs';
+    CvGV(*{$current}{CODE}) ne "*$current";
+}
+
+
 sub get_inheritance_data {
     my $self = shift;
 
@@ -97,6 +109,7 @@ sub get_inheritance_data {
         for my $function (Devel::Symdump->new($package)->functions) {
             $function =~ s/^ $package :://x;
             next if $seen{$function}++;
+            next if $self->is_not_method($function, $package);
             push @functions => $function;
         }
 
@@ -198,7 +211,7 @@ __END__
 
 =head1 NAME
 
-
+{% p.package %} - Template plugin to help generate POD
 
 =head1 SYNOPSIS
 
@@ -215,8 +228,6 @@ __END__
 
     =head1 DESCRIPTION
 
-    {% p.write_inheritance %}
-
     =head1 METHODS
 
     =over 4
@@ -224,6 +235,8 @@ __END__
     {% p.write_methods %}
 
     =back
+
+    {% p.write_inheritance %}
 
     {% PROCESS standard_pod_zid %}
 

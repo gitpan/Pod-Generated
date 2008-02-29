@@ -7,6 +7,7 @@ perl_version '5.006';
 
 $::IS_MODULE_INSTALL_TEMPLATE = 1;
 requires 'Class::ISA';
+requires 'Devel::Peek';
 requires 'Devel::Symdump';
 requires 'Module::Install::Template';
 requires 'Text::Conjunct';

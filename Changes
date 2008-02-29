@@ -4,6 +4,17 @@ global:
 releases:
   - author: 'Marcel Gruenauer <marcel@cpan.org>'
     changes:
+      - set the version to 0.04
+      - 'Template::Plugin::Generated: added NAME section to pod'
+      - updated t/perlcriticrc
+      - "Template::Plugin::Generated: don't assume a sub is inherited if Devel::Peek's CvGV says it's from a different package, i.e., imported"
+      - moved generated documentation of interited methods to after documentation of this class' methods so the manpage is more readable
+      - 'Work around an API change in Attribute::Handlers 0.79, shipped with perl 5.10, where a single scalar value is returned as an array ref when ATTR(SCALAR) is used'
+    date: 2008-02-29T13:57:33Z
+    tags: []
+    version: 0.04
+  - author: 'Marcel Gruenauer <marcel@cpan.org>'
+    changes:
       - Now uses Text::Conjunct so that Template::Plugin::PodGenerated->write_inheritance() produces more natural-sounding documentation
       - '.shipit: added Twitter step'
       - 'Makefile.PL: added auto_install()'
