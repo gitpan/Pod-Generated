@@ -1,50 +1,30 @@
 #!/usr/bin/env perl
-
 use warnings;
 use strict;
 use YAML;
 use Test::More tests => 1;
 use Test::Differences;
 
-
 package Foo;
-
 use Pod::Generated::Attributes;
-
-our $__DOC
-    : Purpose(test class for demonstrating doc attributes)
-    : Id($Id: 02doc.t 12181 2006-11-15 15:18:44Z gr $)
-    : Author(Marcel Gruenauer <marcel@cpan.org>);
-
-our $VERSION = '1.23';
-
+our $__DOC : Purpose(test class for demonstrating doc attributes) :
+  Author(Marcel Gruenauer <marcel@cpan.org>);
+our $VERSION = '0.05';
 our %blah : Purpose(the blah hash);
-our $say  : Purpose(what we say)
-          : Default(abc);
+our $say : Purpose(what we say) : Default(abc);
 
-sub new
-    : Purpose(constructs a %p object)
-    : Returns(the %p object)
-    : Throws(exception 1)
-    : Throws(exception 2)
-    : Throws(exception 3)
-{
-    bless {} , shift
+sub new : Purpose(constructs a %p object) : Returns(the %p object) :
+  Throws(exception 1) : Throws(exception 2) : Throws(exception 3) {
+    bless {}, shift;
 }
 
-
-sub say
-    : Purpose(prints its arguments, appending a newline)
-    : Param(@text; the text to be printed)
-    : Deprecated(use Perl6::Say instead)
-{
+sub say : Purpose(prints its arguments, appending a newline) :
+  Param(@text; the text to be printed) : Deprecated(use Perl6::Say instead) {
     my $self = shift;
     print @_, "\n";
 }
 
-
 package main;
-
 my $expected = Load(<<'EOYAML');
 Foo:
   CODE:
@@ -72,8 +52,6 @@ Foo:
     __DOC:
       purpose:
         - test class for demonstrating doc attributes
-      id:
-        - '$Id: 02doc.t 12181 2006-11-15 15:18:44Z gr $'
       author:
         - 'Marcel Gruenauer <marcel@cpan.org>'
     say:
@@ -82,5 +60,4 @@ Foo:
       purpose:
         - what we say
 EOYAML
-
 eq_or_diff({ Pod::Generated::doc() }, $expected, 'doc hash');

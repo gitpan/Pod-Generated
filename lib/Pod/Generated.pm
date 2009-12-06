@@ -1,63 +1,43 @@
 package Pod::Generated;
-
-
+use 5.008;
 use warnings;
 use strict;
-
-
-our $VERSION = '0.04';
-
-
+our $VERSION = '0.05';
 use base 'Exporter';
-
-
-our %EXPORT_TAGS = (
-    util  => [ qw(add_doc doc) ],
-);
-
-
+our %EXPORT_TAGS = (util => [qw(add_doc doc)],);
 our @EXPORT_OK = @{ $EXPORT_TAGS{all} = [ map { @$_ } values %EXPORT_TAGS ] };
-
 
 sub add_doc {
     my ($package, $glob_slot, $symbol_name, $doc_type, $doc) = @_;
 
     # $glob_slot is CODE, SCALAR etc.
-
     my %interpolate = (
         p   => $package,
         '%' => '%',
     );
-
     if (defined $doc) {
-        $doc =~ s/%(.)/ $interpolate{$1} || "%$1" /ge
+        $doc =~ s/%(.)/ $interpolate{$1} || "%$1" /ge;
     }
-
     our %doc;
     push @{ $doc{$package}{$glob_slot}{$symbol_name}{$doc_type} } => $doc;
 }
-
 
 sub doc {
     our %doc;
     wantarray ? %doc : \%doc;
 }
-
-
-
 1;
-
-
 __END__
 
 =head1 NAME
 
-Pod::Generated - generate POD documentation during 'make' time
+Pod::Generated - Generate POD documentation during "make" time
 
 =head1 SYNOPSIS
 
     use Pod::Generated 'add_doc';
 
+    my $pkg = __PACKAGE__;
     add_doc($pkg, CODE   => 'new',   purpose => 'A constructor.');
     add_doc($pkg, SCALAR => 'count', purpose => 'Number of flurbles.');
 
@@ -79,7 +59,7 @@ This modules exports two functions on request:
 
 =over 4
 
-=item add_doc
+=item C<add_doc>
 
     add_doc($pkg, $glob_type, $symbol_name, $doc_type, $doc);
 
@@ -99,7 +79,7 @@ needs to understand these documentation types.
 
 Documentation is stored in a nested hash.
 
-=item doc 
+=item C<doc >
 
 Returns the documentation hash. This can be used by modules that actually
 generate the documentation to inspect which documentation has been defined.
@@ -108,7 +88,7 @@ generate the documentation to inspect which documentation has been defined.
 
 =head1 TAGS
 
-If you talk about this module in blogs, on del.icio.us or anywhere else,
+If you talk about this module in blogs, on L<delicious.com> or anywhere else,
 please use the C<podgenerated> tag.
 
 =head1 BUGS AND LIMITATIONS
@@ -127,7 +107,7 @@ See perlmodinstall for information and options on installing Perl modules.
 
 The latest version of this module is available from the Comprehensive Perl
 Archive Network (CPAN). Visit <http://www.perl.com/CPAN/> to find a CPAN
-site near you. Or see <http://www.perl.com/CPAN/authors/id/M/MA/MARCEL/>.
+site near you. Or see L<http://search.cpan.org/dist/Pod-Generated/>.
 
 =head1 AUTHOR
 
@@ -135,7 +115,7 @@ Marcel GrE<uuml>nauer, C<< <marcel@cpan.org> >>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright 2007 by Marcel GrE<uuml>nauer
+Copyright 2007-2009 by Marcel GrE<uuml>nauer
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.

@@ -1,14 +1,9 @@
 package Pod::Generated::Attributes;
-
-
 use warnings;
 use strict;
 use Attribute::Handlers;
 use Pod::Generated 'add_doc';
-
-
-our $VERSION = '0.04';
-
+our $VERSION = '0.05';
 
 sub add_attr_doc {
     my ($type, $package, $symbol, $referent, $attr, $data, $phase) = @_;
@@ -19,32 +14,55 @@ sub add_attr_doc {
     # just require A::H 0.79 though because as of this writing it only exists
     # as part of perl 5.10; the most recent standalone distribution on CPAN is
     # 0.78.
-
     $data = $data->[0] if ref($data) eq 'ARRAY' && @$data == 1;
-
     add_doc($package, ref($referent), *{$symbol}{NAME}, $type, $data);
 }
-
-
 no warnings 'redefine';
 
-sub UNIVERSAL::Purpose    :ATTR         { add_attr_doc(purpose    => @_) }
-sub UNIVERSAL::Id         :ATTR         { add_attr_doc(id         => @_) }
-sub UNIVERSAL::Author     :ATTR         { add_attr_doc(author     => @_) }
-sub UNIVERSAL::Param      :ATTR(CODE)   { add_attr_doc(param      => @_) }
-sub UNIVERSAL::Returns    :ATTR(CODE)   { add_attr_doc(returns    => @_) }
-sub UNIVERSAL::Throws     :ATTR(CODE)   { add_attr_doc(throws     => @_) }
-sub UNIVERSAL::Example    :ATTR         { add_attr_doc(example    => @_) }
-sub UNIVERSAL::Deprecated :ATTR         { add_attr_doc(deprecated => @_) }
-sub UNIVERSAL::Default    :ATTR(SCALAR) { add_attr_doc(default    => @_) }
-sub UNIVERSAL::Default    :ATTR(ARRAY)  { add_attr_doc(default    => @_) }
-sub UNIVERSAL::Default    :ATTR(HASH)   { add_attr_doc(default    => @_) }
+sub UNIVERSAL::Purpose : ATTR {
+    add_attr_doc(purpose => @_);
+}
 
+sub UNIVERSAL::Id : ATTR {
+    add_attr_doc(id => @_);
+}
 
+sub UNIVERSAL::Author : ATTR {
+    add_attr_doc(author => @_);
+}
 
+sub UNIVERSAL::Param : ATTR(CODE) {
+    add_attr_doc(param => @_);
+}
+
+sub UNIVERSAL::Returns : ATTR(CODE) {
+    add_attr_doc(returns => @_);
+}
+
+sub UNIVERSAL::Throws : ATTR(CODE) {
+    add_attr_doc(throws => @_);
+}
+
+sub UNIVERSAL::Example : ATTR {
+    add_attr_doc(example => @_);
+}
+
+sub UNIVERSAL::Deprecated : ATTR {
+    add_attr_doc(deprecated => @_);
+}
+
+sub UNIVERSAL::Default : ATTR(SCALAR) {
+    add_attr_doc(default => @_);
+}
+
+sub UNIVERSAL::Default : ATTR(ARRAY) {
+    add_attr_doc(default => @_);
+}
+
+sub UNIVERSAL::Default : ATTR(HASH) {
+    add_attr_doc(default => @_);
+}
 1;
-
-
 __END__
 
 =head1 NAME
@@ -52,6 +70,8 @@ __END__
 Pod::Generated::Attributes - use attributes to declare documentation
 
 =head1 SYNOPSIS
+
+    use Pod::Generated::Attributes;
 
     sub say
         : Purpose(prints its arguments, appending a newline)
@@ -71,21 +91,21 @@ The following attributes are provided:
 
 =over 4
 
-=item Purpose
+=item C<Purpose>
 
-=item Id
+=item C<Id>
 
-=item Author
+=item C<Author>
 
-=item Param
+=item C<Param>
 
-=item Returns
+=item C<Returns>
 
-=item Throws
+=item C<Throws>
 
-=item Example
+=item C<Example>
 
-=item Default
+=item C<Default>
 
 =back
 
@@ -93,7 +113,7 @@ More documentation will follow.
 
 =head1 TAGS
 
-If you talk about this module in blogs, on del.icio.us or anywhere else,
+If you talk about this module in blogs, on L<delicious.com> or anywhere else,
 please use the C<podgenerated> tag.
 
 =head1 BUGS AND LIMITATIONS
@@ -112,7 +132,7 @@ See perlmodinstall for information and options on installing Perl modules.
 
 The latest version of this module is available from the Comprehensive Perl
 Archive Network (CPAN). Visit <http://www.perl.com/CPAN/> to find a CPAN
-site near you. Or see <http://www.perl.com/CPAN/authors/id/M/MA/MARCEL/>.
+site near you. Or see L<http://search.cpan.org/dist/Pod-Generated/>.
 
 =head1 AUTHOR
 
@@ -120,7 +140,7 @@ Marcel GrE<uuml>nauer, C<< <marcel@cpan.org> >>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright 2007 by Marcel GrE<uuml>nauer
+Copyright 2007-2009 by Marcel GrE<uuml>nauer
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.
